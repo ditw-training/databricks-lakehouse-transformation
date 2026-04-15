@@ -105,31 +105,25 @@ Expected: catalog `retailhub_<your_username>` with schemas: `bronze`, `silver`, 
 
 ### Day 1 — Data Processing & Transformation Pipelines
 
-| Time | Block | Type | Topics |
-|------|-------|------|--------|
-| 13:00 – 13:25 | **01 Medallion Architecture** | Demo | Bronze-Silver-Gold recap in pipeline context, data flow design, modularity (load → transform → save) |
-| 13:25 – 14:05 | **02 Batch & Stream Ingestion** | Demo | Batch vs streaming, COPY INTO, Auto Loader (cloudFiles), schema evolution, `availableNow` trigger |
-| 14:05 – 14:35 | **01 Workshop: Ingestion** | Hands-on | COPY INTO, Auto Loader batch mode, schema evolution, DESCRIBE DETAIL metrics |
-| 14:35 – 14:55 | Break | | |
-| 14:55 – 15:35 | **03 Lakeflow Pipelines** | Demo | STREAMING TABLE vs MATERIALIZED VIEW, Expectations, AUTO CDC (SCD 1/2), lineage |
-| 15:35 – 16:05 | **02 Workshop: Lakeflow** | Hands-on | Bronze/Silver/Gold declarations, expectations, pipeline creation in UI, event_log queries |
-| 16:05 – 16:25 | Break | | |
-| 16:25 – 16:50 | **04 Orchestration** | Demo | Multi-task Jobs, CRON scheduling, retry policies, repair runs |
-| 16:50 – 17:00 | Wrap-up + Q&A | | |
+| Block | Type | Topics |
+|-------|------|--------|
+| **01 Medallion Architecture** | Demo | Bronze-Silver-Gold recap in pipeline context, data flow design, modularity (load → transform → save) |
+| **02 Batch & Stream Ingestion** | Demo | CTAS, COPY INTO, Auto Loader (cloudFiles), schema evolution, `availableNow` trigger, error handling |
+| **01 Workshop: Ingestion** | Hands-on | COPY INTO, Auto Loader batch mode, schema evolution, DESCRIBE DETAIL metrics |
+| **03 Lakeflow Pipelines** | Demo | STREAMING TABLE vs MATERIALIZED VIEW, Expectations, Quarantine pattern, `expect_all`, AUTO CDC (SCD 1/2) |
+| **02 Workshop: Lakeflow** | Hands-on | Bronze/Silver/Gold declarations, expectations, pipeline creation in UI, event_log queries |
+| **04 Orchestration** | Demo | Multi-task Jobs, CRON scheduling, retry policies, repair runs |
 
 ### Day 2 — Lakehouse Architecture & Optimization
 
-| Time | Block | Type | Topics |
-|------|-------|------|--------|
-| 13:00 – 13:20 | **01 Delta Lake Advanced** | Demo | Change Data Feed (CDF), advanced MERGE patterns, SCD deep dive |
-| 13:20 – 14:10 | **02 Optimization & Maintenance** | Demo | OPTIMIZE, VACUUM, Z-ORDER, Liquid Clustering, EXPLAIN, small file problem |
-| 14:10 – 14:40 | **01 Workshop: Optimization** | Hands-on | File compaction, Z-ORDER, Liquid Clustering, query plan analysis |
-| 14:40 – 15:00 | Break | | |
-| 15:00 – 15:25 | **03 Cost Management** | Demo | Compute vs storage costs, optimization impact on costs, Bronze-Silver-Gold cost model |
-| 15:25 – 15:55 | **04 Security & Governance** | Demo | Unity Catalog governance, GRANT/REVOKE, row-level security, column masking, lineage |
-| 15:55 – 16:15 | Break | | |
-| 16:15 – 16:45 | **02 Workshop: Security** | Hands-on | Access control, row filters, column masks, audit queries |
-| 16:45 – 17:00 | Wrap-up + Q&A | | |
+| Block | Type | Topics |
+|-------|------|--------|
+| **01 Delta Lake Advanced** | Demo | Change Data Feed (CDF), advanced MERGE patterns, RESTORE, Shallow/Deep Clone |
+| **02 Optimization & Maintenance** | Demo | OPTIMIZE, VACUUM, Z-ORDER, Liquid Clustering, Predictive Optimization, EXPLAIN, small file problem |
+| **01 Workshop: Optimization** | Hands-on | File compaction, Z-ORDER, Liquid Clustering, query plan analysis |
+| **03 Cost Management** | Demo | Compute vs storage costs, optimization impact on costs, Bronze-Silver-Gold cost model |
+| **04 Security & Governance** | Demo | Unity Catalog governance, GRANT/REVOKE, row-level security, column masking, Delta Sharing, lineage |
+| **02 Workshop: Security** | Hands-on | Access control, row filters, column masks, audit queries |
 
 ---
 
@@ -184,11 +178,10 @@ Databricks Lakehouse & Transformation/
 │
 ├── assets/images/                               # Diagrams and screenshots
 │
-└── docs/                                        # Reference materials
-    ├── day1_cheatsheet.md                       # Day 1 quick reference
-    ├── day1_quiz.md                             # Day 1 self-assessment (10-15 questions)
-    ├── day2_cheatsheet.md                       # Day 2 quick reference
-    └── day2_quiz.md                             # Day 2 self-assessment (10-15 questions)
+└── docs/                                        # Reference materials (PDF)
+    └── Day1/
+        ├── day1_cheatsheet.pdf                  # Day 1 quick reference
+        └── day1_quiz.pdf                        # Day 1 knowledge check (15 questions)
 ```
 
 ---
