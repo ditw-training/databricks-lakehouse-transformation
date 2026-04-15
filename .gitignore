@@ -1,0 +1,27 @@
+# Training internal files
+SYLLABUS.md
+notebooks/Day2/
+docs/Day2/
+scripts/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Databricks
+.databricks/
