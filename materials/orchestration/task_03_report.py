@@ -1,10 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Task 3: Generate Sales Report
-# MAGIC Aggregates RetailHub metrics (total orders, revenue, avg order value, top segments).  
+# MAGIC # Task 3: Generate Report
+# MAGIC Aggregates metrics (total trips, revenue, avg fare/distance).  
 # MAGIC Prints summary report.
-# MAGIC
-# MAGIC **RetailHub scenario:** Daily sales summary from Silver orders + customer segments.
 
 # COMMAND ----------
 
@@ -13,11 +11,9 @@ import json
 from datetime import datetime
 
 # Parameters
-dbutils.widgets.text("catalog", "", "Catalog")
-dbutils.widgets.text("source_table", "silver.silver_orders", "Source Table")
+dbutils.widgets.text("source_table", "samples.nyctaxi.trips")
 
-catalog = dbutils.widgets.get("catalog")
-source_table = f"{catalog}.{dbutils.widgets.get('source_table')}" if catalog else dbutils.widgets.get("source_table")
+source_table = dbutils.widgets.get("source_table")
 
 # COMMAND ----------
 
@@ -25,35 +21,33 @@ source_table = f"{catalog}.{dbutils.widgets.get('source_table')}" if catalog els
 df = spark.table(source_table)
 
 report = df.agg(
-    count("*").alias("total_orders"),
-    countDistinct("customer_id").alias("unique_customers"),
-    round(sum("net_amount"), 2).alias("total_revenue"),
-    round(avg("net_amount"), 2).alias("avg_order_value"),
-    round(max("net_amount"), 2).alias("max_order_value"),
-    round(avg("discount_percent"), 1).alias("avg_discount_pct")
+    count("*").alias("total_trips"),
+    round(sum("fare_amount"), 2).alias("total_revenue"),
+    round(avg("fare_amount"), 2).alias("avg_fare"),
+    round(avg("trip_distance"), 2).alias("avg_distance"),
+    round(max("fare_amount"), 2).alias("max_fare")
 ).collect()[0]
 
 # COMMAND ----------
 
 # Display report
-print("\n" + "=" * 50)
-print("  RETAILHUB — DAILY SALES REPORT")
-print("=" * 50)
-print(f"  Total Orders:      {report.total_orders:,}")
-print(f"  Unique Customers:  {report.unique_customers:,}")
-print(f"  Total Revenue:     ${report.total_revenue:,.2f}")
-print(f"  Avg Order Value:   ${report.avg_order_value:.2f}")
-print(f"  Max Order Value:   ${report.max_order_value:.2f}")
-print(f"  Avg Discount:      {report.avg_discount_pct}%")
-print("=" * 50)
-print(f"  Generated at:      {datetime.now()}")
-print("=" * 50 + "\n")
+print("\n" + "="*50)
+print("DAILY REPORT")
+print("="*50)
+print(f"Total Trips:    {report.total_trips:,}")
+print(f"Total Revenue:  ${report.total_revenue:,.2f}")
+print(f"Avg Fare:       ${report.avg_fare:.2f}")
+print(f"Avg Distance:   {report.avg_distance:.2f} miles")
+print(f"Max Fare:       ${report.max_fare:.2f}")
+print("="*50)
+print(f"Generated at:   {datetime.now()}")
+print("="*50 + "\n")
 
 # COMMAND ----------
 
 # Return result
 dbutils.notebook.exit(json.dumps({
     "status": "SUCCESS",
-    "total_orders": report.total_orders,
+    "total_trips": report.total_trips,
     "total_revenue": float(report.total_revenue)
 }))

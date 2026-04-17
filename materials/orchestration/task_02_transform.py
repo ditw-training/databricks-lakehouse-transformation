@@ -1,10 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Task 2: Transform Data (Bronze → Silver)
-# MAGIC Reads previous task result via `taskValues`, transforms raw orders  
-# MAGIC into Silver layer with business calculations. Returns row count.
-# MAGIC
-# MAGIC **RetailHub scenario:** Clean orders, compute net amounts, add processing metadata.
+# MAGIC # Task 2: Transform Data
+# MAGIC Reads previous task result via `taskValues`, applies transformations  
+# MAGIC (duration, cost per mile). Returns row count.
 
 # COMMAND ----------
 
@@ -13,14 +11,10 @@ from datetime import date
 import json
 
 # Parameters
-dbutils.widgets.text("catalog", "", "Catalog")
-dbutils.widgets.text("source_table", "bronze.bronze_orders", "Source Table")
-dbutils.widgets.text("target_table", "silver.silver_orders", "Target Table")
+dbutils.widgets.text("source_table", "samples.nyctaxi.trips")
 dbutils.widgets.text("run_date", "")
 
-catalog = dbutils.widgets.get("catalog")
-source_table = f"{catalog}.{dbutils.widgets.get('source_table')}" if catalog else dbutils.widgets.get("source_table")
-target_table = f"{catalog}.{dbutils.widgets.get('target_table')}" if catalog else dbutils.widgets.get("target_table")
+source_table = dbutils.widgets.get("source_table")
 run_date = dbutils.widgets.get("run_date") or str(date.today())
 
 # COMMAND ----------
@@ -39,30 +33,28 @@ except:
 
 # COMMAND ----------
 
-# Transformation: Bronze → Silver
-print(f"Transforming: {source_table} → {target_table}")
+# Transformation
+print(f"Transforming: {source_table}")
 
 df = spark.table(source_table)
 
 df_transformed = (
     df
-    .withColumn("gross_amount", col("quantity") * col("unit_price"))
-    .withColumn("discount_amount",
-                round(col("quantity") * col("unit_price") * col("discount_percent") / 100, 2))
-    .withColumn("net_amount",
-                round(col("quantity") * col("unit_price") * (1 - col("discount_percent") / 100), 2))
-    .withColumn("order_date", col("order_datetime").cast("date"))
+    .withColumn("trip_duration_minutes", 
+                round((col("tpep_dropoff_datetime").cast("long") - 
+                       col("tpep_pickup_datetime").cast("long")) / 60, 2))
+    .withColumn("cost_per_mile", 
+                when(col("trip_distance") > 0, 
+                     round(col("fare_amount") / col("trip_distance"), 2))
+                .otherwise(0))
     .withColumn("processing_date", lit(run_date))
-    .filter(col("order_id").isNotNull())
-    .filter(col("quantity") > 0)
 )
 
 row_count = df_transformed.count()
-print(f"Transformed {row_count:,} rows")
+print(f"Transformed {row_count} rows")
 
 df_transformed.select(
-    "order_id", "customer_id", "quantity", "unit_price",
-    "gross_amount", "discount_amount", "net_amount"
+    "trip_distance", "fare_amount", "trip_duration_minutes", "cost_per_mile"
 ).show(5)
 
 # COMMAND ----------
