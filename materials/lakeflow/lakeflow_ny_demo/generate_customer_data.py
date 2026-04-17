@@ -4,7 +4,7 @@ Data Generator for Customer SCD Demo
 Usage:
 1. Run generate_batch_0() once to create initial historical data
 2. Run generate_batch_1() through generate_batch_5() sequentially to simulate changes
-3. Each batch creates a new JSON file in /Volumes/retailhub_trener/lakeflow_demo/dataset/tpch_customer/
+3. Each batch creates a new JSON file in /Volumes/<YOUR_CATALOG>/default/datasets/dataset/lakeflow_demo/tpch_customer/
 
 The pipeline's Auto Loader will automatically detect and process new files.
 """
@@ -12,8 +12,10 @@ The pipeline's Auto Loader will automatically detect and process new files.
 from pyspark.sql.functions import col, when, concat, lit, current_timestamp, to_json, struct
 import json
 
-# Target path for JSON files
-TARGET_PATH = "/Volumes/retailhub_trener/lakeflow_demo/dataset/tpch_customer/"
+# ⚠️ IMPORTANT: Replace 'retailhub_trainer' with YOUR OWN catalog name!
+# Each participant gets their own catalog created by the trainer (e.g. retailhub_jan, retailhub_anna).
+# Ask your trainer for your catalog name if you're not sure.
+TARGET_PATH = "/Volumes/retailhub_trainer/default/datasets/dataset/lakeflow_demo/tpch_customer/"
 
 
 def generate_batch_0():
