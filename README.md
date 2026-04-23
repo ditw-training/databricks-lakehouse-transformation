@@ -29,6 +29,8 @@ Business scenario: fictional company **RetailHub** — continuing from Databrick
 | **Scenario** | RetailHub — customers, orders, products |
 | **Format** | ~30% presentation · ~40% live demo · ~30% hands-on workshops |
 
+> **Client delivery note:** Each day is delivered in a strict ~3h net instruction timebox. Core Day 2 objectives are always prioritized; advanced/bonus workshop sections are optional and run only if time permits.
+
 ### Learning Objectives
 
 After completing Day 1 (Data Processing & Transformation Pipelines), participants will be able to:
